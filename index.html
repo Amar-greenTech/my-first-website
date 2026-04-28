@@ -130,7 +130,10 @@
 
   <script>
     window.onload = function () {
+      if (!sessionStorage.getItem("welcomeShow")) {
     alert("YOU ARE WELCOME RAWAN!!!");
+        sessionStorge.setItem("welcomeShown", "true");
+      }
     };
   </script>
 
