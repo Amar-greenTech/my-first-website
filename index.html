@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Affordable  Website Developer for Small Businesses in Saudi Arabia </title>
+  <title>Future Farmer & Developer</title>
 
   <style>
     body {
@@ -15,7 +15,7 @@
     }
 
     header {
-      background: linear-gradient(to right,#065f46,#16a34a);
+      background: linear-gradient(to right,#065f46, #16a34a);
       color: white;
       text-align: center;
       padding: 20px;
@@ -50,6 +50,16 @@
       cursor: pointer;
     }
 
+    .addserviceBtn {
+     background-color: #f5e7e7;
+     color : black;
+    }
+
+    .addserviceBtn:hover {
+      color: white;
+      background-color: rgb(120, 112, 112);
+    }
+
     button:hover {
       background-color: black;
     }
@@ -66,46 +76,55 @@
 
 <body>
   <header>
-  <h1>Get a Modern Website for Your Business</h1>
+  <h1>Get a Modern Websites for Small Businesses </h1>
   <p>I design fast, clean websites that help you attract more customers. </p> 
   </header>
 
   <section>
-    <h2>Need a website?</h2>
-    <P>Contact Me today and get your business online</P>
+    <h2>Need a Website?</h2>
+    <P>Contact me today and get your business online</P>
     <button>Contact Me</button>
   </section>
+  
 
   <section>
-    <h2>My Services</h2>
-    <ul>
-     <li>Business Website:  SR</li>
-     <li>Landing Page:  SR</li>
-     <li>Website Re-design -  SR</li>
-    </ul>
-  </section>
+  <h2>My Services </h2>
+  <ul>
+    <li><button onclick="addService('Business Website',800)" class="addserviceBtn">Business Website:</button> 400-800 SR</li>
+    <li><button onclick="addService('Landing page',300)" class="addserviceBtn">Landing Page:</button> 200-300 SR</li>
+    <li><button onclick="addService('Website Redesign',120)" class="addserviceBtn">Website Redesign: </button> 120 SR</li>
+  </ul>
 
-  <section>
-    <h2>My Work</h2>
-    <P>Website for a coffee shop (Restaurant Demo)</P>
-    <a href="#">View Project</a>
-     <P>Website for a farm business(Restaurant Demo)</P>
-    <a href="#">View Project</a>
-     <P>Website for a small shop (Restaurant Demo)</P>
-    <a href="#">View Project</a>
-  </section>
+
+  <ul id="selectedServiceList"></ul>
+
+  <h3 id="priceDisplay"> Total: 0 SR </h3>
+  <button onclick="resetcart()" style="background-color: #666;">Reset Total</button>
+
  
+  </section>
+
+  <section>
+   <h2>My work</h2> 
+   <p>  Website for a coffee shop (Restaurant Demo)</p>
+   <a href="#">view Project</a>
+   <p>Website for a farm business(Farm Demo)</p>
+   <a href="#">view Project</a>
+   <p>Website for small shop (Shop Demo)</p>
+   <a href="#">view Project</a>
+  </section>
+
    <section>
   <h2>Learn more</h2>
   <p>Visit my favorite learning site</p>
   <a href="https://github.com" target="_blank" rel="noopener noreferrer">Visit GitHub</a>   
   </section>
 
-  
-
 <section>
 <h2>Contact Me</h2>
-<a href="https://whatsapp.com/dl/" target="_black">Chat on WatsAPP</a><br><br>
+
+<a href="https://whatsapp.com/dl/" target="_black">Chat on WatsApp</a><br><br>
+
 
 <form>    
   <label for="name">Name:</label><br>
@@ -121,6 +140,7 @@
   <textarea id="message" name="message"></textarea><br><br>
 
   <button type="submit" id="submitBtn">Start Your Project Today</button><br><br>
+  
  </form>
  </section>
 
@@ -128,23 +148,85 @@
   <p>&#xA9  2026 my Website  </p>
  </footer>
 
+
   <script>
     window.onload = function () {
       if (!sessionStorage.getItem("welcomeShown")) {
-    alert("YOU ARE WELCOME روان !!!");
+    alert("YOU ARE WELCOME روان !!");
         sessionStorage.setItem("welcomeShown", "true");
       }
     };
   </script>
 
- <script>
-  document.getElementById("submitBtn").onclick = function () {
+<script>
+  let total = 0;
+  let cart = [];
+  let priceHistory = [];
+
+  function addService(name,price) {
+    total += price;
+    cart.push(name);
+    priceHistory.push(price);
+
+  document.getElementById("priceDisplay").innerText = " Total: " + total + " SR ";
+  updateServiceList();
+
+  if (total >= 1500) {
+    document.getElementById("priceDisplay").style.color = "green";
+  }
+  }
+
+  function removeSpecific(index) {
+    total = total - priceHistory[index];
+
+    cart.splice(index, 1);
+    priceHistory.splice(index, 1);
+
+    document.getElementById("priceDisplay").innerText = " Total: " + total +  " SR";
+    updateServiceList();
+
+    if (total < 1500) {
+      document.getElementById("priceDisplay").style.color = "black";
+    }
+  }
+
+  function updateServiceList() {
+    let listHTML =  "";
+    cart.forEach(function(item,index) {
+      listHTML += `<li>${item}<button onclick='removeSpecific(${index})' style='background:red; padding:2px 5px; margin-left:10px; font-size:10px;'> x</button></li>`;
+    });
+
+    document.getElementById("selectedServiceList").innerHTML = listHTML;
+  }
+
+  function resetcart() {
+    total = 0;
+
+    cart = [];
+    document.getElementById("priceDisplay").innerText = "Total: 0 SR";
+    document.getElementById("priceDisplay").style.color = "black";
+    document.getElementById("selectedServiceList").innerHTML = "";
+  }
+
+
+
+
+
+
+</script>
+
+<script>
+
+  document.getElementById("submitBtn").onclick = function  (event) {
+    event.preventDefault();
 
     let name = document.getElementById("name").value;
     if (name==="") {
       alert("Please enter your name!.")
     } else {
       alert(" Welcome "  + name + "!, I am ready to build your site.")
+
+      alert("Your current estimate is: " + total + " SR");
     }
   };
 
