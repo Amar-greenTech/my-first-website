@@ -6,21 +6,62 @@
   <title>Future Farmer & Developer</title>
 
   <style>
+
+    :root {
+      --saudi-green: #006C35;
+      --gold-accent: #D4AF37;
+      --sand-bg: #F9F7F2;
+    }
+
+
+    @keyframes slowZoom {
+      from {transform: scale(1);}
+      to {transform: scale(1.1);}
+    }
+
+      html{
+        scroll-behavior: smooth;
+      }
+
     body {
-     font-family: Arial;
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
      margin: 0;
      background-color: #f4f4f4;
      max-width: 800px;
      margin: auto;
+
     }
 
-    header {
-      background: linear-gradient(to right,#065f46, #16a34a);
-      color: white;
-      text-align: center;
-      padding: 20px;
+    div.header {
+      background: linear-gradient(to bottom, rgba(5, 157, 79, 0.75), rgba(0,0,0,0.2));
+     color: white;
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     padding: 20px;
+      position: absolute;
+      top: 0;;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+     
     }
 
+
+    .heading {
+      font-size: 2.5em;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+      ;
+    }
+
+    .heading p {
+      font-size: 1.1em;
+      opacity: 0.9;
+
+    }
     section {
       background-color: white;
       margin: 20px;
@@ -29,12 +70,23 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    img {
-      display: block;
-      margin: 10px auto;
+    .hero-box {
+      width : 100%;
+      height: 550px;
+      overflow: hidden;
+      position: relative;
+      border-radius: 0 0 40px 40px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      margin-top: 0px;
+    }
+
+    .hero-box img {
+    
       width: 100%;
-      max-width: 400px;
-      
+      height: 100%;
+      justify-content: center;
+      object-fit: cover;
+      animation: slowZoom 15s infinite alternate ease-in-out;
     }
     a {
       color: blue;
@@ -42,7 +94,7 @@
     }
 
     button {
-      background-color: green;
+      background-color: var(--saudi-green);
       color: white;
       border: none;
       padding: 12px;
@@ -53,6 +105,22 @@
     .addserviceBtn {
      background-color: #f5e7e7;
      color : black;
+    }
+
+    #selectedServiceList {
+      background: #f9f9f9;
+      border-left: 5px solid #16a34a;
+      padding: 15px;
+      list-style: none;
+    }
+
+    #selectedServiceList li {
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 5px;
     }
 
     .addserviceBtn:hover {
@@ -75,17 +143,39 @@
 
 
 <body>
-  <header>
-  <h1>Get a Modern Websites for Small Businesses </h1>
-  <p>I design fast, clean websites that help you attract more customers. </p> 
-  </header>
+ <div class="hero-box">
+    <img src="https://images.unsplash.com/photo-1663900108404-a05e8bf82cda?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D " alt="riyadh city">
 
-  <section>
+  
+ <div class="header">
+  <header>
+  <h1 class="heading">Get a Modern Websites for Small Businesses </h1>
+  <p >I design fast, clean websites that help you attract more customers. </p>
+   <br>
+
+  </header>
+</div >
+
+
+ 
+
+
+
+ <section>
     <h2>Need a Website?</h2>
     <P>Contact me today and get your business online</P>
-    <button>Contact Me</button>
+    <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Contact Me</button>
   </section>
   
+
+
+
+  </header>
+</div >
+
+
+  </div>
+
 
   <section>
   <h2>My Services </h2>
@@ -120,10 +210,10 @@
   <a href="https://github.com" target="_blank" rel="noopener noreferrer">Visit GitHub</a>   
   </section>
 
-<section>
+<section id="contact">
 <h2>Contact Me</h2>
 
-<a href="https://whatsapp.com/dl/" target="_black">Chat on WatsApp</a><br><br>
+<a href="#" onclick="sendWatsApp()">Chat on WatsApp</a><br><br>
 
 
 <form>    
@@ -148,90 +238,112 @@
   <p>&#xA9  2026 my Website  </p>
  </footer>
 
-
-  <script>
-    window.onload = function () {
-      if (!sessionStorage.getItem("welcomeShown")) {
-    alert("YOU ARE WELCOME روان !!");
-        sessionStorage.setItem("welcomeShown", "true");
-      }
-    };
-  </script>
-
 <script>
-  let total = 0;
-  let cart = [];
-  let priceHistory = [];
 
-  function addService(name,price) {
-    total += price;
-    cart.push(name);
-    priceHistory.push(price);
+// --- 1. THE BRAIN (Memory) ---
+let total = Number(localStorage.getItem("savedTotal")) || 0;
+let cart = JSON.parse(localStorage.getItem("savedCart")) || [];
+let priceHistory = JSON.parse(localStorage.getItem("savedHistory")) || [];
 
-  document.getElementById("priceDisplay").innerText = " Total: " + total + " SR ";
+// --- 2. THE STARTUP ---
+window.onload = function() {
   updateServiceList();
-
+  document.getElementById("priceDisplay").innerText = " Total: " + total + " SR ";
+  
   if (total >= 1500) {
     document.getElementById("priceDisplay").style.color = "green";
   }
+
+  if (!sessionStorage.getItem("welcomeShown")) {
+    alert("YOU ARE WELCOME روان !!");
+    sessionStorage.setItem("welcomeShown", "true");
+  }
+};
+
+  //----watsApp link logic----
+  function sendWatsApp(){
+    let message = `Hello! I am interested in your services:${cart.join(", ")}.
+    My estimate is ${total} SR.`;
+  
+
+  let encodedMessage = encodeURIComponent(message);
+
+  window.open(`https://wa.me/966578906441?text=${encodedMessage}`, '_blank');
   }
 
-  function removeSpecific(index) {
-    total = total - priceHistory[index];
-
-    cart.splice(index, 1);
-    priceHistory.splice(index, 1);
-
-    document.getElementById("priceDisplay").innerText = " Total: " + total +  " SR";
-    updateServiceList();
-
-    if (total < 1500) {
-      document.getElementById("priceDisplay").style.color = "black";
-    }
-  }
-
-  function updateServiceList() {
-    let listHTML =  "";
-    cart.forEach(function(item,index) {
-      listHTML += `<li>${item}<button onclick='removeSpecific(${index})' style='background:red; padding:2px 5px; margin-left:10px; font-size:10px;'> x</button></li>`;
-    });
-
-    document.getElementById("selectedServiceList").innerHTML = listHTML;
-  }
-
-  function resetcart() {
-    total = 0;
-
-    cart = [];
-    document.getElementById("priceDisplay").innerText = "Total: 0 SR";
-    document.getElementById("priceDisplay").style.color = "black";
-    document.getElementById("selectedServiceList").innerHTML = "";
-  }
-
-
-
-
-
-
-</script>
-
-<script>
-
-  document.getElementById("submitBtn").onclick = function  (event) {
+document.getElementById("submitBtn").onclick = function(event) {
     event.preventDefault();
 
     let name = document.getElementById("name").value;
-    if (name==="") {
-      alert("Please enter your name!.")
-    } else {
-      alert(" Welcome "  + name + "!, I am ready to build your site.")
+    let messageBox = document.getElementById("message");
 
-      alert("Your current estimate is: " + total + " SR");
+    if (name === "") {
+      alert("Please enter your name!.");
+    } else {
+      
+     let summary = "I am interested in: " + cart.join(", ") + ". ";
+     summary += "My estimated total is " + total + " SR.";
+
+     
+
+     messageBox.value = summary;
+
+     alert("Welcome " + name + "! Your cart has been added to the message below. You can now send your request!");
     }
   };
 
+// --- 3. THE CORE ACTIONS (Add/Remove/Reset) ---
+function addService(name, price) {
+  total += price;
+  cart.push(name);
+  priceHistory.push(price);
+  
+  saveToMemory(); // save data
+  updateUI();     // update screen
+}
+
+function removeSpecific(index) {
+  total -= priceHistory[index];
+  cart.splice(index, 1);
+  priceHistory.splice(index, 1);
+  
+  saveToMemory();
+  updateUI();
+}
+
+function resetcart() {
+  total = 0;
+  cart = [];
+  priceHistory = [];
+  
+  localStorage.clear(); 
+  updateUI();
+}
+
+// --- 4. THE TOOLS (Helpers)---
+function saveToMemory() {
+  localStorage.setItem("savedCart", JSON.stringify(cart));
+  localStorage.setItem("savedTotal", total);
+  localStorage.setItem("savedHistory", JSON.stringify(priceHistory));
+}
+
+function updateUI() {
+  updateServiceList();
+  document.getElementById("priceDisplay").innerText = " Total: " + total + " SR ";
+  document.getElementById("priceDisplay").style.color = (total >= 1500) ? "green" : "black";
+}
+
+function updateServiceList() {
+  let listHTML = "";
+  cart.forEach(function(item, index) {
+    // Note the backticks ` below
+    listHTML += `<li>${item}<button onclick='removeSpecific(${index})' style='background:red; color:white; border:none; padding:2px 5px; margin-left:10px; font-size:10px; cursor:pointer;'> x</button></li>`;
+  });
+  document.getElementById("selectedServiceList").innerHTML = listHTML;
+}
+
+</script>
 
   
- </script>
 </body>
 </html>
